@@ -1,9 +1,11 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
+import { StyleSheet } from 'react-native';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { ThemedText } from '@/components/ThemedText';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -12,23 +14,29 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
+        headerShown: true,
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: 'BAYAR-BAYAR',
+          tabBarLabel: ({color, focused}) => (
+            <ThemedText type='navbar'>Home</ThemedText>
+          ),
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+            <TabBarIcon name={focused ? 'home-sharp' : 'home-outline'} color={Colors.light.text} />
           ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="report"
         options={{
-          title: 'Explore',
+          title: 'BAYAR-BAYAR',
+          tabBarLabel: ({color, focused}) => (
+            <ThemedText type='navbar'>Report</ThemedText>
+          ),
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+            <TabBarIcon name={focused ? 'newspaper-sharp' : 'newspaper-outline'} color={Colors.light.text} />
           ),
         }}
       />
