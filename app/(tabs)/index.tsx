@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10, 
     color: '#fffff',
-    backgroundColor: '#393938',
+    backgroundColor: '#cbcbcb',
   },
   stepContainer: {
     gap: 8,
