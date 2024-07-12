@@ -7,7 +7,7 @@ export type ButtonComponentProps = PropsWithChildren & {
   darkColor?: string;
   style?: StyleProp<ViewStyle>;
   onPress: (event: GestureResponderEvent) => void;
-  type?: 'default' | 'primary' | 'secondary' | 'submit' | 'reject';
+  type?: 'default' | 'primary' | 'secondary' | 'close';
 };
 
 export function ButtonComponent({
@@ -16,17 +16,16 @@ export function ButtonComponent({
   onPress,
   type = 'default'
 } : ButtonComponentProps) {
-  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <TouchableOpacity onPress={onPress} style={[
         type === 'default' ? styles.default : undefined,
         type === 'primary' ? styles.primary : undefined,
         type === 'secondary' ? styles.secondary : undefined,
+        type === 'close' ? styles.close : undefined, 
         style
       ]}>
       {children}
-      {/* {isOpen && <ThemedView style={styles.content}>{children}</ThemedView>} */}
     </TouchableOpacity>
   );
 }
@@ -64,5 +63,16 @@ const styles = StyleSheet.create({
     elevation: 8,
     position: 'absolute',
     backgroundColor: '#e10000',
-  }
+  },
+  close: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#8b8b8b',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 5,
+    elevation: 8,
+    position: 'absolute',
+    backgroundColor: '#8b8b8b',
+  },
 });
