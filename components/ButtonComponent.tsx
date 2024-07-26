@@ -1,5 +1,5 @@
 import { PropsWithChildren, useState } from 'react';
-import { StyleSheet, TouchableOpacity, ViewStyle, StyleProp, GestureResponderEvent } from 'react-native';
+import { StyleSheet, Pressable, ViewStyle, StyleProp, GestureResponderEvent } from 'react-native';
 
 export type ButtonComponentProps = PropsWithChildren & {
   icon?: string;
@@ -7,7 +7,7 @@ export type ButtonComponentProps = PropsWithChildren & {
   darkColor?: string;
   style?: StyleProp<ViewStyle>;
   onPress: (event: GestureResponderEvent) => void;
-  type?: 'default' | 'primary' | 'secondary' | 'close';
+  type?: 'default' | 'primary' | 'secondary' | 'simple' | 'close';
 };
 
 export function ButtonComponent({
@@ -18,15 +18,16 @@ export function ButtonComponent({
 } : ButtonComponentProps) {
 
   return (
-    <TouchableOpacity onPress={onPress} style={[
+    <Pressable onPress={onPress} style={[
         type === 'default' ? styles.default : undefined,
         type === 'primary' ? styles.primary : undefined,
         type === 'secondary' ? styles.secondary : undefined,
         type === 'close' ? styles.close : undefined, 
+        type === 'simple' ? styles.simple : undefined,
         style
       ]}>
       {children}
-    </TouchableOpacity>
+    </Pressable>
   );
 }
 
@@ -63,6 +64,17 @@ const styles = StyleSheet.create({
     elevation: 8,
     position: 'absolute',
     backgroundColor: '#e10000',
+  },
+  simple: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#8d8d8d',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 5,
+    elevation: 8,
+    position: 'absolute',
+    backgroundColor: '#ffffff',
   },
   close: {
     justifyContent: 'center',

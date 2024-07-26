@@ -1,5 +1,6 @@
 import React, { Dispatch, SetStateAction, useState, PropsWithChildren } from 'react'
-import { Modal, Pressable, StyleSheet, View, Text } from 'react-native'
+import { Modal, Pressable, StyleSheet, View, Text, TouchableWithoutFeedback } from 'react-native'
+
 import { ThemedText } from './ThemedText'
 import { ThemedView } from './ThemedView'
 import { ButtonComponent } from './ButtonComponent';
@@ -12,53 +13,32 @@ export type ModalProps = PropsWithChildren & {
 
 export default function ModalComponent({ show, setShow, title, children }: ModalProps) {
   return (
-    <ThemedView style={styles.modalContainer}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={show}
-        style={styles.modalAnimation}
-        onRequestClose={() => setShow(false)}>
-        <ThemedView style={styles.modalContent}>
-          <ThemedView style={styles.modalHeader}>
-            <ThemedText type='subtitle' style={styles.subtitle}>{title}</ThemedText>
-          </ThemedView>
-          <ThemedView style={styles.modalMiddle}>
-            {children}
-          </ThemedView>
-          <ThemedView style={styles.modalFooter}>
-            <ButtonComponent 
-              type='default'
-              style={styles.btnOK}
-              onPress={() => setShow(false)}>
-              <ThemedText type='buttonText' style={styles.btnText}>NEXT</ThemedText>
-            </ButtonComponent>
-            {/* <ButtonComponent 
-              type='close'
-              style={styles.btnClose}
-              onPress={() => setShow(false)}>
-              <ThemedText type='buttonText' style={styles.btnText}>Close</ThemedText>
-            </ButtonComponent> */}
-          </ThemedView>
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={show}>
+      <TouchableWithoutFeedback onPress={() => setShow(false)}>
+        <ThemedView style={styles.modalContainer}>
+          <TouchableWithoutFeedback onPress={() => {}}>
+            <ThemedView style={styles.modalContent}>
+              <ThemedView style={styles.modalMiddle}>
+                <ThemedText type='subtitle' style={styles.subtitle}>{title}</ThemedText>
+                {children}
+              </ThemedView>
+            </ThemedView>
+          </TouchableWithoutFeedback>
         </ThemedView>
-      </Modal>
-    </ThemedView>
+      </TouchableWithoutFeedback>
+    </Modal>
   )
 }
 
 const styles = StyleSheet.create({
-  modalAnimation: {
-    height: '50%',
-  },
   modalContainer: {
-    position: 'absolute',
-    bottom: 0,
-    top: 0,
-    right: 0,
-    left: 0,
-    opacity: 0.7,
-    backgroundColor: '#000',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
     justifyContent: 'center',
+    alignItems: 'center',
   },
   modalContent: {
     backgroundColor: 'white',
@@ -66,9 +46,10 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     bottom: 0,
     position: 'absolute',
-    padding: 35,
+    padding: 25,
     width: '100%',
-    height: '50%',
+    height: 'auto',
+    flexDirection: 'column',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -80,24 +61,15 @@ const styles = StyleSheet.create({
   },
   modalHeader: {
     width: '100%',
-    height: '10%',
+    height: 'auto',
   },
   modalMiddle: {
     width: '100%',
-    height: '80%',
+    height: 'auto',
   },
   modalFooter: {
     width: '100%',
-    height: '10%',
-  },
-  btnOK: {
-    borderRadius: 50,
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 30,
-    paddingRight: 30,
-    width: '100%',
-    bottom: 0,
+    height: 'auto',
   },
   subtitle: {
     textAlign: 'center',
