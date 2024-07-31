@@ -1,28 +1,51 @@
-import Reac, { PropsWithChildren } from 'react'
-import { StyleSheet, StyleProp, ViewStyle, GestureResponderEvent } from 'react-native'
-import { ThemedCard } from './ThemedCard'
+import React from 'react'
+import { 
+    StyleSheet, 
+    StyleProp, 
+    ViewStyle,
+    GestureResponderEvent,
+    Pressable,
+} from 'react-native';
+import { EventList } from '@/app/types';
+import { ThemedText } from './ThemedText';
+import { ThemedView } from './ThemedView';
 
-export type CardProps = PropsWithChildren & {
+export type CardProps = {
     style?: StyleProp<ViewStyle>;
-    onPress: (event: GestureResponderEvent) => void;
+    items: EventList;
+    onPress?: (items: EventList) => void;
 }
 
 export const CardComponent = ({
     style,
-    children,
+    items,
+    onPress,
 }: CardProps) => {
-  return (
-    <ThemedCard style={[styles.cardContainer, style]}>
-        {children}
-    </ThemedCard>
-  )
+    return (
+        <ThemedView>
+            <Pressable style={[styles.cardContainer, style]} onPress={() => onPress?.(items)}>
+                <ThemedText type='subtitle' style={styles.textDate}>
+                    {items.date.slice(0, 10)}
+                </ThemedText>
+                <ThemedText type='title'>
+                    {items.name}
+                </ThemedText>
+            </Pressable>
+        </ThemedView>
+    )
 }
 
 const styles = StyleSheet.create({
     cardContainer: {
+        marginTop: 10,
+        position: 'relative',
+        display: 'flex',
         padding: 20,
-        borderRadius: 20,
-        backgroundColor: '#ff7979',
-        shadowColor: '#000'
-    }
+        borderRadius: 10,
+        backgroundColor: '#FFC0CB',
+        shadowColor: '#000',
+    },
+    textDate: {
+        color: '#979797',
+    },
 })

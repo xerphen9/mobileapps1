@@ -1,7 +1,7 @@
 export interface EventList {
     id: number;
-    created_at: Date;
-    date: Date;
+    created_at: string;
+    date: string;
     name: string;
     total?: number;
     underwriter: string;

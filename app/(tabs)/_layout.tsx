@@ -36,7 +36,10 @@ export default function TabLayout() {
     const { data, error } = await supabase
       .from('Event')
       .insert({ 
-        date: date, name: event, underwriter: underwriter, total: 0
+        date: date, 
+        name: event, 
+        underwriter: underwriter, 
+        total: 0
       })
 
     if(error){
@@ -70,13 +73,12 @@ export default function TabLayout() {
         screenOptions={{
           tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tabIconSelected,
           tabBarStyle: styles.tabBarContainer,
-          headerShown: true,
         }}>
         <Tabs.Screen
           name="index"
           options={{
-            headerTitle: 'Hello, David Kristiawan',
             headerTitleStyle: styles.tabHeaderStyle,
+            headerTitle: 'Home',
             tabBarShowLabel: true,
             tabBarLabel: ({ color, focused, position }) => (
               <ThemedText style={focused ? styles.tabBarlabelFocused : styles.tabBarLabel}>.</ThemedText>
@@ -92,8 +94,8 @@ export default function TabLayout() {
         <Tabs.Screen
           name="report"
           options={{
-            headerTitle: 'Hello, David Kristiawan',
             headerTitleStyle: styles.tabHeaderStyle,
+            headerTitle: 'Report',
             tabBarShowLabel: true,
             tabBarLabel: ({ color, focused, position }) => (
               <ThemedText style={focused ? styles.tabBarlabelFocused : styles.tabBarLabel}>.</ThemedText>
@@ -108,7 +110,7 @@ export default function TabLayout() {
         />
       </Tabs>
       <ButtonComponent type='default' onPress={() => setIsOpen(true)} style={styles.btnAdd}>
-        <TabBarIcon name='add' style={styles.btnText} />
+        <TabBarIcon name='add' style={styles.btnAddText} />
       </ButtonComponent>
       {
         isOpen &&
@@ -173,7 +175,6 @@ const styles = StyleSheet.create({
   tabBarContainer: {
     height: 65,
     backgroundColor: '#efeded',
-    opacity: 1,
   },
   tabBarlabelFocused: {
     color: '#ff7979',
@@ -185,11 +186,11 @@ const styles = StyleSheet.create({
     display: 'none',
   },
   btnAdd: {
-    width: 55,
-    height: 55,
+    width: 65,
+    height: 65,
     bottom: 40,
-    right: 165,
-    borderRadius: 20,
+    marginLeft: 165,
+    borderRadius: 25,
   },
   btn: {
     borderRadius: 50,
@@ -225,6 +226,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     right: 0,
     left: 0
+  },
+  btnAddText: {
+    fontSize: 35,
+    fontWeight: 'bold',
+    color: '#fff'
   },
   btnText: {
     color: '#fff',
