@@ -2,11 +2,11 @@ import { Tabs } from 'expo-router';
 import React, { ChangeEvent, useState, useEffect } from 'react';
 import { Platform, StyleSheet, TextInput, Text } from 'react-native';
 import { useRouter } from 'expo-router';
-import {supabase} from '@/libs/supabase';
+import { supabase } from '@/libs/supabase';
 import Toast from 'react-native-toast-message';
-import DateTimePicker, {DateTimePickerEvent, Event} from '@react-native-community/datetimepicker';
+import DateTimePicker, { DateTimePickerEvent, Event } from '@react-native-community/datetimepicker';
 
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
+import { IconComponent } from '@/components/IconComponent';
 import { Colors } from '@/constants/Colors';
 import { ButtonComponent } from '@/components/ButtonComponent';
 import ModalComponent from '@/components/ModalComponent';
@@ -35,30 +35,30 @@ export default function TabLayout() {
   const handleSubmit = async () => {
     const { data, error } = await supabase
       .from('Event')
-      .insert({ 
-        date: date, 
-        name: event, 
-        underwriter: underwriter, 
-        total: 0
+      .insert({
+        date: date,
+        name: event,
       })
 
-    if(error){
-      console.log(error)
+    if (error) {
       Toast.show({
         type: 'error',
         text1: 'Hello',
         text2: `${error}`,
       })
     }
-    Toast.show({
-      type: 'success',
-      text1: 'Event added Successfully!',
-    })
+
+    if(data) {
+      Toast.show({
+        type: 'success',
+        text1: 'Event added Successfully!',
+      })
+    }
     setIsOpen(false)
   }
 
   useEffect(() => {
-    if(isOpen === false) {
+    if (isOpen === false) {
       setDate(new Date())
       setEvent('')
       setStep(0)
@@ -78,14 +78,15 @@ export default function TabLayout() {
           name="index"
           options={{
             headerTitleStyle: styles.tabHeaderStyle,
-            headerTitle: 'Home',
+            headerShown: false,
+            headerTitle: '',
             tabBarShowLabel: true,
             tabBarLabel: ({ color, focused, position }) => (
               <ThemedText style={focused ? styles.tabBarlabelFocused : styles.tabBarLabel}>.</ThemedText>
             ),
             tabBarIcon: ({ color, focused }) => (
-              <TabBarIcon
-                name='home-outline'
+              <IconComponent
+                name='home-filled'
                 color={color}
               />
             ),
@@ -95,14 +96,14 @@ export default function TabLayout() {
           name="report"
           options={{
             headerTitleStyle: styles.tabHeaderStyle,
-            headerTitle: 'Report',
-            tabBarShowLabel: true,
+            headerShown: false,
+            headerTitle: '',
             tabBarLabel: ({ color, focused, position }) => (
               <ThemedText style={focused ? styles.tabBarlabelFocused : styles.tabBarLabel}>.</ThemedText>
             ),
             tabBarIcon: ({ color, focused }) => (
-              <TabBarIcon
-                name='browsers'
+              <IconComponent
+                name='bar-chart'
                 color={color}
               />
             ),
@@ -110,53 +111,35 @@ export default function TabLayout() {
         />
       </Tabs>
       <ButtonComponent type='default' onPress={() => setIsOpen(true)} style={styles.btnAdd}>
-        <TabBarIcon name='add' style={styles.btnAddText} />
+        <IconComponent name='add' style={styles.btnAddText} />
       </ButtonComponent>
       {
         isOpen &&
         <ModalComponent show={isOpen} setShow={setIsOpen} title='ADD EVENT'>
           <ThemedView style={styles.inputContainer}>
-            {
-              step === 0 ?
-                <>
-                <ThemedView style={styles.dateContainer}>
-                  <ButtonComponent type='simple' onPress={() => setIsDateOpen(true)} style={styles.btnDate}>
-                    <ThemedText type='default'>{date.toDateString()}</ThemedText>
-                  </ButtonComponent>
-                </ThemedView>
-                <TextInput placeholder='Event'
-                          placeholderTextColor='#949494'
-                          onChangeText={setEvent}
-                          style={styles.inputField} />
-                <ButtonComponent 
-                  type='default'
-                  style={styles.btn}
-                  onPress={() => setStep(step+1)}>
-                  <ThemedText type='buttonText' style={styles.btnText}>NEXT</ThemedText>
-                </ButtonComponent>
-                </>
-              :
-                <>
-                <TextInput placeholder='Underwriter'
-                          placeholderTextColor='#949494'
-                          onChangeText={setUnderwriter}
-                          style={styles.inputField} />
-                <ButtonComponent 
-                  type='default'
-                  style={styles.btn}
-                  onPress={handleSubmit}>
-                  <ThemedText type='buttonText' style={styles.btnText}>OK</ThemedText>
-                </ButtonComponent>
-                </>
-            }
+            <ThemedView style={styles.dateContainer}>
+              <ButtonComponent type='simple' onPress={() => setIsDateOpen(true)} style={styles.btnDate}>
+                <ThemedText type='default'>{date.toDateString()}</ThemedText>
+              </ButtonComponent>
+            </ThemedView>
+            <TextInput placeholder='Event'
+              placeholderTextColor='#949494'
+              onChangeText={setEvent}
+              style={styles.inputField} />
+            <ButtonComponent 
+              type='default'
+              style={styles.btn}
+              onPress={handleSubmit}>
+              <ThemedText type='buttonText' style={styles.btnText}>OK</ThemedText>
+            </ButtonComponent>
           </ThemedView>
           {
             isDateOpen && (
-              <DateTimePicker value={date} 
+              <DateTimePicker value={date}
                 mode='date'
                 display='default'
                 onPointerCancel={() => setIsDateOpen(false)}
-                onChange={changeDate}  
+                onChange={changeDate}
               />
             )
           }
@@ -170,7 +153,7 @@ export default function TabLayout() {
 
 const styles = StyleSheet.create({
   tabHeaderStyle: {
-      fontSize: 20,
+    fontSize: 20,
   },
   tabBarContainer: {
     height: 65,
@@ -188,8 +171,9 @@ const styles = StyleSheet.create({
   btnAdd: {
     width: 65,
     height: 65,
-    bottom: 40,
-    marginLeft: 165,
+    bottom: 35,
+    left: '50%',
+    transform: [{translateX: -30}],
     borderRadius: 25,
   },
   btn: {

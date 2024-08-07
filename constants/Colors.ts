@@ -8,7 +8,7 @@ const tintColorDark = '#fff'; //white
 
 export const Colors = {
   light: {
-    text: '#000', //white
+    text: '#000', //black
     background: '#FFFFFF', //white
     backgroundCard: '#ff7979', //peach
     tint: tintColorLight,

@@ -6,7 +6,7 @@ export type ButtonComponentProps = PropsWithChildren & {
   lightColor?: string;
   darkColor?: string;
   style?: StyleProp<ViewStyle>;
-  onPress: (event: GestureResponderEvent) => void;
+  onPress?: (event: GestureResponderEvent) => void;
   type?: 'default' | 'primary' | 'secondary' | 'simple' | 'close';
 };
 
@@ -35,6 +35,8 @@ const styles = StyleSheet.create({
   default: {
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 10,
+    padding: 10,
     shadowColor: '#ff7979',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
@@ -46,6 +48,8 @@ const styles = StyleSheet.create({
   primary: {
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 10,
+    padding: 10,
     shadowColor: '#1f8fe4',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
@@ -57,6 +61,8 @@ const styles = StyleSheet.create({
   secondary: {
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 10,
+    padding: 10,
     shadowColor: '#e10000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
@@ -68,6 +74,8 @@ const styles = StyleSheet.create({
   simple: {
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 10,
+    padding: 10,
     shadowColor: '#8d8d8d',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
@@ -79,6 +87,8 @@ const styles = StyleSheet.create({
   close: {
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 10,
+    padding: 10,
     shadowColor: '#8b8b8b',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,

@@ -12,23 +12,30 @@ import { ThemedView } from './ThemedView';
 
 export type CardProps = {
     style?: StyleProp<ViewStyle>;
-    items: EventList;
-    onPress?: (items: EventList) => void;
+    id: number;
+    date?: string;
+    name?: string;
+    onPress?: (id: number) => void;
 }
+
+export const randomColor = Math.floor(Math.random()*16777215).toString(16)
 
 export const CardComponent = ({
     style,
-    items,
+    id,
+    date,
+    name,
     onPress,
 }: CardProps) => {
+
     return (
-        <ThemedView>
-            <Pressable style={[styles.cardContainer, style]} onPress={() => onPress?.(items)}>
+        <ThemedView style={[styles.cardContainer, style]}>
+            <Pressable onPress={() => onPress?.(id)}>
                 <ThemedText type='subtitle' style={styles.textDate}>
-                    {items.date.slice(0, 10)}
+                    {date}
                 </ThemedText>
                 <ThemedText type='title'>
-                    {items.name}
+                    {name}
                 </ThemedText>
             </Pressable>
         </ThemedView>
@@ -41,9 +48,11 @@ const styles = StyleSheet.create({
         position: 'relative',
         display: 'flex',
         padding: 20,
+        height: 150,
         borderRadius: 10,
-        backgroundColor: '#FFC0CB',
-        shadowColor: '#000',
+        backgroundColor: '#fff',
+        borderColor: '#cacaca',
+        borderWidth: 2,
     },
     textDate: {
         color: '#979797',
