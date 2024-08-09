@@ -1,60 +1,88 @@
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
 import { 
     StyleSheet, 
     StyleProp, 
     ViewStyle,
-    GestureResponderEvent,
     Pressable,
+    Animated
 } from 'react-native';
-import { EventList } from '@/app/types';
-import { ThemedText } from './ThemedText';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { ThemedView } from './ThemedView';
+import { RectButton } from 'react-native-gesture-handler';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
-export type CardProps = {
+export type CardProps = PropsWithChildren & {
     style?: StyleProp<ViewStyle>;
     id: number;
     date?: string;
     name?: string;
     onPress?: (id: number) => void;
+    onRemove?: (id: number) => void;
 }
-
-export const randomColor = Math.floor(Math.random()*16777215).toString(16)
 
 export const CardComponent = ({
     style,
     id,
-    date,
-    name,
+    children,
     onPress,
+    onRemove,
 }: CardProps) => {
 
+    const renderRightAction = (_progress: Animated.AnimatedInterpolation<number>, dragX: Animated.AnimatedInterpolation<number>) => {
+        const trans = dragX.interpolate({
+            inputRange: [-100, 0],
+            outputRange: [0, 1],
+            extrapolate: 'clamp'
+        });
+        return (
+        <RectButton onPress={() => onRemove?.(id)} style={styles.rightAction}>
+            <Animated.Text style={[{
+                transform: [{ translateX: trans }],
+            }]}>
+                <Ionicons name="trash-outline" size={30} color="black" />
+            </Animated.Text>
+        </RectButton>
+        );
+    }
+
     return (
-        <ThemedView style={[styles.cardContainer, style]}>
-            <Pressable onPress={() => onPress?.(id)}>
-                <ThemedText type='subtitle' style={styles.textDate}>
-                    {date}
-                </ThemedText>
-                <ThemedText type='title'>
-                    {name}
-                </ThemedText>
-            </Pressable>
-        </ThemedView>
+        <Pressable onPress={() => onPress?.(id)}>
+            <ThemedView style={[styles.cardContainer, style]}>
+                {children}
+                <Swipeable renderRightActions={renderRightAction} containerStyle={styles.roundContainer}>
+                    <ThemedView style={styles.round}></ThemedView>
+                </Swipeable>
+            </ThemedView>
+        </Pressable>
     )
 }
 
 const styles = StyleSheet.create({
     cardContainer: {
-        marginTop: 10,
-        position: 'relative',
-        display: 'flex',
-        padding: 20,
-        height: 150,
-        borderRadius: 10,
-        backgroundColor: '#fff',
-        borderColor: '#cacaca',
-        borderWidth: 2,
+        margin: 2,
+        padding: 7,
+        flexDirection: 'row',
+        borderRadius: 50,
+        backgroundColor: '#efeded',
     },
-    textDate: {
-        color: '#979797',
+    roundContainer: {
+        width: '30%',
+        borderRadius: 50,
+        justifyContent: 'flex-end',
+        backgroundColor: '#fff'
+    },
+    round: {
+        backgroundColor: '#ff7979',
+        alignSelf: 'flex-end',
+        width: 50,
+        height: 50,
+        borderRadius: 50,
+    },
+    rightAction: {
+        borderRadius: 50,
+        backgroundColor: 'transparent',
+        alignItems: 'flex-end',
+        marginRight: 12,
+        justifyContent: 'center',
     },
 })

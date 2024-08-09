@@ -30,7 +30,7 @@ export default function EventDetails() {
   const [category, setCategory] = useState<string>('')
   const [product, setProduct] = useState<string>('')
   const [amount, setAmount] = useState<string>('')
-  const headerTitle = `${name} - ${date.slice(0, 10)}`
+  const headerTitle = `${name} - ${date?.slice(8,10)}/${date?.slice(5,7)}/${date?.slice(0, 4)}`
 
   const dropDownIcon = [
     { name: 'Food', icon: 'fastfood' },

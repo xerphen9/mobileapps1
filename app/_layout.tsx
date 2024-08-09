@@ -4,6 +4,7 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -23,7 +24,7 @@ export default function RootLayout() {
   const header = 
     <HeaderComponent>
       <ThemedText type='subtitle' style={styles.subtitle}>
-        Hello David,
+        Hi David,
       </ThemedText>
       <ThemedText type='title' style={styles.title1}>
         Let's Pay
@@ -44,17 +45,19 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{
-          headerShown: true,
-          headerTitle: 'Bayar-Bayar',
-          statusBarTranslucent: true,
-          header: () => header
-        }}/>
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+    <GestureHandlerRootView>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{
+            headerShown: true,
+            headerTitle: 'Bayar-Bayar',
+            statusBarTranslucent: true,
+            header: () => header
+          }}/>
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }
 
@@ -74,7 +77,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     textAlign: 'left',
     marginStart: 40,
-    lineHeight: 50,
+    lineHeight: 40,
     fontSize: 40,
   } 
 })

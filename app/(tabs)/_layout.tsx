@@ -45,6 +45,7 @@ export default function TabLayout() {
         type: 'error',
         text1: 'Hello',
         text2: `${error}`,
+        swipeable: true
       })
     }
 
@@ -52,6 +53,7 @@ export default function TabLayout() {
       Toast.show({
         type: 'success',
         text1: 'Event added Successfully!',
+        swipeable: true,
       })
     }
     setIsOpen(false)
@@ -65,7 +67,7 @@ export default function TabLayout() {
     } else {
       return
     }
-  }, [event, isOpen])
+  }, [isOpen])
 
   return (
     <>
