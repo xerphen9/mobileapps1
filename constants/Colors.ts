@@ -10,7 +10,9 @@ export const Colors = {
   light: {
     text: '#000', //black
     background: '#FFFFFF', //white
+    tabBackground: '#efeded', //broken white
     backgroundCard: '#ff7979', //peach
+    shadowColor: '#000',
     tint: tintColorLight,
     icon: '#e79aff', //lilac
     tabIconDefault: '#979797', //gray
@@ -18,8 +20,10 @@ export const Colors = {
   },
   dark: {
     text: '#ECEDEE', //light gray
-    background: '#121212', //dark
+    background: '#1F1A24', //dark
+    tabBackground: '#282828', //dark gray
     backgroundCard: '#ff7979', //peach
+    shadowColor: '#fff',
     tint: tintColorDark,
     icon: '#9BA1A6', //gray a little bit light
     tabIconDefault: '#9BA1A6', //gray a little bit light

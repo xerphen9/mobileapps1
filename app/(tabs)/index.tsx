@@ -3,26 +3,25 @@ import { StyleSheet, FlatList, Pressable } from 'react-native';
 import { supabase } from '@/libs/supabase';
 import Toast from 'react-native-toast-message';
 import { router } from 'expo-router';
+import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
 
 import { CardComponent } from '@/components/CardComponent';
 import { EventList } from '@/app/types';
-import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
+import { details } from '@/features/eventSlice';
+import { ThemedView } from '@/components/ThemedView';
 
 export default function HomeScreen() {
+  const isRefresh: boolean = useAppSelector((state) => state.event.refresh)
   const [list, setList] = useState<EventList[]>([])
   const [remove, setRemove] = useState<boolean>(false)
-  const month = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-  ]
+  const dispatch = useAppDispatch()
 
   const allEvent = async () => {
     try {
       const { data, error } = await supabase.from('Event').select('*')
 
       if (error) {
-        console.log(error)
         Toast.show({
           type: 'error',
           text1: 'Error message',
@@ -53,37 +52,43 @@ export default function HomeScreen() {
   }
 
   const handleNavigation = (item: EventList) => {
+    dispatch(details({
+      id: item.id,
+      name: item.name,
+      date: item.date,
+      members: item.members
+    }))
     router.push({
-      pathname: '/details/[id]',
+      pathname: '/eventdetails/[id]',
       params: {
         id: item.id,
         name: item.name,
         date: item.date,
-        underwriter: item.underwriter
+        members: item.members
       }
     })
   }
 
   useEffect(() => {
     allEvent()
-  }, [remove])
+  }, [isRefresh, remove])
 
   return (
-    <FlatList
-      data={list}
-      renderItem={({ item }) =>
-        <CardComponent id={item.id} onRemove={() => handleRemove(item.id)}>
-          <Pressable style={styles.content} onPress={() => handleNavigation(item)}>
-            <ThemedText type='textNormal' style={styles.cardName}>{item.name?.length > 7 ? item.name?.replace(item.name.substring(6), '...').toUpperCase() : item.name.toUpperCase()}</ThemedText>
-            <ThemedText type='link' style={styles.cardDate}>{item.date?.slice(8,10)}/{item.date?.slice(5,7)}/{item.date?.slice(0, 4)}</ThemedText>
-          </Pressable>
-        </CardComponent>
-      }
-
-      onRefresh={() => allEvent()}
-      refreshing={false}
-      style={styles.container}
-    />
+    <ThemedView style={styles.container}>
+      <FlatList
+        data={list}
+        renderItem={({ item }) =>
+          <CardComponent id={item.id} onRemove={() => handleRemove(item.id)}>
+            <Pressable style={styles.content} onPress={() => handleNavigation(item)}>
+              <ThemedText type='textNormal' style={styles.cardName}>{item.name?.length > 7 ? item.name?.replace(item.name.substring(6), '...').toUpperCase() : item.name.toUpperCase()}</ThemedText>
+              <ThemedText type='link' style={styles.cardDate}>{item.date?.slice(8,10)}/{item.date?.slice(5,7)}/{item.date?.slice(0, 4)}</ThemedText>
+            </Pressable>
+          </CardComponent>
+        }
+        onRefresh={() => allEvent()}
+        refreshing={false}
+      />
+    </ThemedView>
   );
 }
 
@@ -91,7 +96,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    backgroundColor: '#fff',
   },
   content: {
     justifyContent: 'center',
@@ -101,7 +105,9 @@ const styles = StyleSheet.create({
   },
   cardName: {
     fontSize: 25,
-    opacity: 0.7,
+    fontFamily: 'Quicksand',
+    fontWeight: 'bold',
+    opacity: 0.6,
     textAlignVertical: 'center',
     marginLeft: 10,
     color: '#ff7979',

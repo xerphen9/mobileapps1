@@ -74,8 +74,8 @@ const styles = StyleSheet.create({
     round: {
         backgroundColor: '#ff7979',
         alignSelf: 'flex-end',
-        width: 50,
-        height: 50,
+        width: 40,
+        height: 40,
         borderRadius: 50,
     },
     rightAction: {

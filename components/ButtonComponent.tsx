@@ -7,7 +7,7 @@ export type ButtonComponentProps = PropsWithChildren & {
   darkColor?: string;
   style?: StyleProp<ViewStyle>;
   onPress?: (event: GestureResponderEvent) => void;
-  type?: 'default' | 'primary' | 'secondary' | 'simple' | 'close';
+  type?: 'default' | 'primary' | 'secondary' | 'basic' | 'transparent' | 'close' | 'multiplechoice' | 'multiplechoiceSelected';
 };
 
 export function ButtonComponent({
@@ -22,8 +22,11 @@ export function ButtonComponent({
         type === 'default' ? styles.default : undefined,
         type === 'primary' ? styles.primary : undefined,
         type === 'secondary' ? styles.secondary : undefined,
-        type === 'close' ? styles.close : undefined, 
-        type === 'simple' ? styles.simple : undefined,
+        type === 'close' ? styles.close : undefined,
+        type === 'basic' ? styles.basic : undefined, 
+        type === 'transparent' ? styles.transparent : undefined,
+        type === 'multiplechoice' ? styles.multiplechoice : undefined,
+        type === 'multiplechoiceSelected' ? styles.multiplechoiceSelected : undefined,
         style
       ]}>
       {children}
@@ -63,38 +66,51 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
     padding: 10,
-    shadowColor: '#e10000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 5,
-    elevation: 8,
     position: 'absolute',
     backgroundColor: '#e10000',
   },
-  simple: {
+  basic: {
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
     padding: 10,
-    shadowColor: '#8d8d8d',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 5,
-    elevation: 8,
     position: 'absolute',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#fff',
+  },
+  transparent: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    padding: 10,
+    position: 'absolute',
+    backgroundColor: 'transparent',
   },
   close: {
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
     padding: 10,
-    shadowColor: '#8b8b8b',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 5,
-    elevation: 8,
     position: 'absolute',
     backgroundColor: '#8b8b8b',
   },
+  multiplechoice: {
+    width: 100,
+    alignItems: 'center',
+    borderRadius: 10,
+    padding: 10,
+    position: 'relative',
+    borderColor: '#ff7979',
+    borderWidth: 1,
+    backgroundColor: 'transparent',
+  },
+  multiplechoiceSelected: {
+    width: 100,
+    alignItems: 'center',
+    borderRadius: 10,
+    padding: 10,
+    position: 'relative',
+    borderColor: '#fff',
+    borderWidth: 1,
+    backgroundColor: '#ff7979',
+  }
 });

@@ -5,11 +5,13 @@ import {
   ImageBackground,
   TextInput
 } from 'react-native'
+import { DarkTheme, DefaultTheme } from '@react-navigation/native'
 import { Stack, useLocalSearchParams } from 'expo-router'
 import { ThemedText } from '@/components/ThemedText'
 import { ThemedView } from '@/components/ThemedView'
 import { supabase } from '@/libs/supabase'
 import { StandList } from '../types'
+import { useColorScheme } from '@/hooks/useColorScheme'
 import Toast from 'react-native-toast-message'
 
 import ModalComponent from '@/components/ModalComponent';
@@ -17,32 +19,41 @@ import { ButtonComponent } from '@/components/ButtonComponent'
 import { IconComponent } from '@/components/IconComponent'
 import DropDownComponent from '@/components/DropDownComponent'
 import LoadingComponent from '@/components/LoadingComponent'
+import { useAppSelector } from '@/hooks/reduxHooks'
+import { Collapsible } from '@/components/Collapsible'
 
 export default function EventDetails() {
-  const { id, name, date } = useLocalSearchParams()
+  const colorScheme = useColorScheme()
+  const { id } = useLocalSearchParams()
+  const name: string = useAppSelector((state) => state.event.name)
+  const members: string[] = useAppSelector((state) => state.event.members)
+  const date: string = useAppSelector((state) => state.event.date)
+  const [refresh, setRefresh] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
   const [details, setDetails] = useState<StandList[]>([])
-  const [step, setStep] = useState<number>(0);
-  const [members, setMembers] = useState<string[]>([])
-  const [inputMembers, setInputMembers] = useState<string>('')
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [step, setStep] = useState<number>(0);
   const [underwriter, setUnderwriter] = useState<string>('')
   const [category, setCategory] = useState<string>('')
   const [product, setProduct] = useState<string>('')
+  const [addMembers, setAddMembers] = useState<string[]>([])
   const [amount, setAmount] = useState<string>('')
+  const [total, setTotal] = useState<number>(0)
   const headerTitle = `${name} - ${date?.slice(8,10)}/${date?.slice(5,7)}/${date?.slice(0, 4)}`
 
   const dropDownIcon = [
     { name: 'Food', icon: 'fastfood' },
     { name: 'Hotel', icon: 'hotel' },
-    { name: 'Gas', icon: 'local-gas-station' },
+    { name: 'Fuel', icon: 'local-gas-station' },
     { name: 'Transportation', icon: 'directions-transit' },
     { name: 'Ticket', icon: 'confirmation-number' },
   ]
 
-  const fetchEventDetails = async () => {
+  const getStandsData = async () => {
     try {
-      const { data, error } = await supabase.from('Stands').select('*').eq('id', id)
+      const { data, error } = await supabase.from('Stands').select('*').eq("event_id", id)
+
+      console.log(data)
       
       if(error) {
         Toast.show({
@@ -62,45 +73,45 @@ export default function EventDetails() {
     }
   }
 
-  const addMember = () => {
-    if(inputMembers.trim()) {
-      setMembers([...members, inputMembers])
-      setInputMembers('')
-    }
-  }
-
-  const removeMember = (index: number) => {
-    setMembers(members.filter((_, i) => i !== index));
-  }
-
   const handleSubmit = async () => {
+    setRefresh(false)
     try {
-      const { data, error} = await supabase.from('Stands').insert({
-        id: id,
+      const response = await supabase.from('Stands').insert({
         name: product,
         amount: amount,
-        members: members,
         category: category,
         underwriter: underwriter,
+        members: addMembers,
+        total: total,
+        event_id: id,
       })
-
-      if(error) {
-        Toast.show({
-          type: 'error',
-          text1: error.message
-        })
-      }
       
-      if(data) {
-        Toast.show({
-          type: 'success',
-          text1: 'Data added successfully'
-        })
+      if(response) {
+        setRefresh(true)
+        setLoading(false)
+        setIsOpen(false)
       }
-      setLoading(false)
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const handleSelected = (value: string, index: number) => {
+    if(addMembers.includes(value)) {
+      setAddMembers(addMembers.filter((v, i) => v !== value));
+    } else {
+      setAddMembers([...addMembers, value])
+    }
+  }
+
+  const renderStands = (item: StandList) => {
+    return(
+      <Collapsible title={item.underwriter?.toUpperCase()} style={styles.collapseContainer}>
+        <ThemedText>{item.category}</ThemedText>
+        <ThemedText>{item.name}</ThemedText>
+        <ThemedText>{item.amount}</ThemedText>
+      </Collapsible>
+    )
   }
 
   useEffect(() => {
@@ -108,9 +119,8 @@ export default function EventDetails() {
       setUnderwriter('')
       setAmount('')
       setCategory('')
+      setAddMembers([])
       setProduct('')
-      setInputMembers('')
-      setMembers([])
       setStep(0)
     } else {
       return
@@ -118,14 +128,17 @@ export default function EventDetails() {
   }, [isOpen])
 
   useEffect(() => {
-    fetchEventDetails()
-  }, [loading, details])
+    getStandsData()
+    console.log('refresh')
+  }, [loading, refresh])
 
   return (
     <>
     <ThemedView style={styles.container}>
       <Stack.Screen options={{
-        headerTitle: headerTitle
+        headerTitle: headerTitle,
+        statusBarStyle: colorScheme === 'dark' ? 'light' : 'dark',
+        statusBarTranslucent: true,
       }} />
       {
         loading ? 
@@ -134,11 +147,13 @@ export default function EventDetails() {
           details.length !== 0 ?
             <FlatList 
               data={details}
-              renderItem={null} 
+              renderItem={({item}) => renderStands(item)} 
+              onRefresh={() => getStandsData()}
+              refreshing={false}
             />
             : 
             <ImageBackground 
-              source={require('../../assets/images/noresultfound.jpg')}
+              source={require('../../assets/images/noresultfound.png')}
               resizeMode='center'
               style={styles.backgroundImage}
             />
@@ -149,23 +164,32 @@ export default function EventDetails() {
     </ThemedView>
     {
       isOpen &&
-      <ModalComponent show={isOpen} setShow={setIsOpen} title='STANDS'>
+      <ModalComponent show={isOpen} setShow={setIsOpen} step={step} title='STANDS'onBack={setStep}>
         <ThemedView style={styles.inputContainer}>
           {
-            step === 0 ?
+            step === 0 ? 
               <>
               <TextInput 
                 placeholder='Underwriter'
                 placeholderTextColor='#949494'
                 onChangeText={setUnderwriter}
                 style={styles.inputField} />
+              <ButtonComponent 
+                type='default'
+                style={styles.btn}
+                onPress={() => setStep(step+1)}>
+                <ThemedText type='buttonText' style={styles.btnText}>NEXT</ThemedText>
+              </ButtonComponent>
+              </>
+            : 
+              <>
               <DropDownComponent data={dropDownIcon} setCategory={setCategory}/>
               {
                 category === '' || category === 'Gas' ? null :
                   <TextInput 
                     placeholder={
                       category === 'Food' ? 'e.g. Fried Chicken' :
-                      category === 'Hotel' ? 'e.g. Mulia' :
+                      category === 'Hotel' ? 'e.g. Rosewood' :
                       category === 'Transportation' ? 'e.g. Train' :
                       category === 'Ticket' ? 'e.g. Tour' : 
                       ''
@@ -175,6 +199,15 @@ export default function EventDetails() {
                       category === '' || category === 'Gas' ? setProduct : setProduct}
                     style={styles.inputField} />
               }
+              <ThemedView style={styles.memberContainer}>
+                {
+                  members?.map((value, index) => 
+                    <ButtonComponent type={addMembers.includes(value) ? 'multiplechoiceSelected' : 'multiplechoice'} key={index} onPress={() => handleSelected(value, index)}>
+                      <ThemedText>{value.toUpperCase()}</ThemedText>
+                    </ButtonComponent>
+                  )
+                }
+              </ThemedView>
               <TextInput 
                 placeholder='Amount'
                 placeholderTextColor='#949494'
@@ -183,39 +216,6 @@ export default function EventDetails() {
                 inputMode='numeric'
                 keyboardType="numeric"
                 style={styles.inputField} />
-              <ButtonComponent 
-                type='default'
-                style={styles.btn}
-                onPress={() => setStep(step+1)}>
-                <ThemedText type='buttonText' style={styles.btnText}>NEXT</ThemedText>
-              </ButtonComponent>
-              </>
-            :
-              <>
-              <ThemedView style={styles.memberContainer}>
-                <TextInput 
-                  placeholder='Add a member'
-                  placeholderTextColor='#949494'
-                  value={inputMembers}
-                  onChangeText={setInputMembers}
-                  style={styles.inputFieldMember} />
-                <ButtonComponent onPress={addMember} style={styles.btnAddMember}>
-                    <IconComponent name='add' style={styles.btnText}/>
-                </ButtonComponent>
-              </ThemedView>
-              <FlatList
-                data={members}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item, index }) => (
-                  <ThemedView style={styles.memberItem}>
-                    <ThemedText>{item}</ThemedText>
-                    <ButtonComponent type='secondary' onPress={() => removeMember(index)} style={styles.btnRemove}>
-                      <ThemedText style={styles.btnText}>X</ThemedText>
-                    </ButtonComponent>
-                  </ThemedView>
-                )}
-                style={styles.memberList}
-              />
               <ButtonComponent 
                 type='default'
                 style={styles.btn}
@@ -236,8 +236,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   backgroundImage: {
-    width: '100%',
-    height: '100%',
     flex: 1,
   },
   btnAdd: {
@@ -252,22 +250,8 @@ const styles = StyleSheet.create({
   btnText: {
     color: '#fff',
   },
-  btnAddMember: {
-    position: 'relative',
-    padding: 5,
-    borderRadius: 20,
-    width: '25%',
-    marginBottom: 20,
-  },
-  btnRemove: {
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 3,
-    right: 3,
-  },
-  memberContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  collapseContainer: {
+
   },
   inputContainer: {
     width: "100%",
@@ -284,25 +268,6 @@ const styles = StyleSheet.create({
     borderColor: '#b3b3b3',
     borderRadius: 20,
     fontSize: 15,
-  },
-  inputFieldMember: {
-    padding: 10,
-    marginBottom: 20,
-    height: 40,
-    borderWidth: 2,
-    backgroundColor: '#fff',
-    borderColor: '#b3b3b3',
-    borderRadius: 20,
-    fontSize: 15,
-    width: '70%',
-  },
-  memberItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: 'lightgray',
   },
   btn: {
     borderRadius: 50,
@@ -321,7 +286,12 @@ const styles = StyleSheet.create({
     elevation: 5,
     bottom: 0,
   },
-  memberList: {
+  memberContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    columnGap: 5,
+    rowGap: 10,
     marginBottom: 20,
-  },
+  }
 })

@@ -19,7 +19,6 @@ export default function DropDownComponent({
         <SelectDropdown
             data={data}
             onSelect={(selectedItem, index) => {
-                console.log(selectedItem, index);
                 setCategory(selectedItem['name'])
             }}
             renderButton={(selectedItem, isOpened) => {
@@ -52,7 +51,7 @@ export default function DropDownComponent({
 const styles = StyleSheet.create({
     dropdownButtonStyle: {
         width: '100%',
-        height: 50,
+        height: 40,
         marginBottom: 20,
         backgroundColor: '#E9ECEF',
         borderRadius: 50,

@@ -17,12 +17,14 @@ export const HeaderComponent = ({
     ...rest
 }: HeaderProps) => {
   return (
-    <ThemedView {...rest} style={styles.container}>
-      <Image source={require('@/assets/images/person.png')}
-        style={styles.image}
-      />
-      <ThemedView style={styles.content}>
-        {children}
+    <ThemedView>
+      <ThemedView {...rest} style={styles.container}>
+        <Image source={require('@/assets/images/person.png')}
+          style={styles.image}
+        />
+        <ThemedView style={styles.content}>
+          {children}
+        </ThemedView>
       </ThemedView>
     </ThemedView>
   )
@@ -52,7 +54,8 @@ const styles = StyleSheet.create({
       marginTop: '15%',
     },
     content: {
-      padding: 10,
+      padding: 5,
+      marginTop: 20,
       backgroundColor: 'transparent',
     },
     subtitle: {

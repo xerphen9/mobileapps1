@@ -5,6 +5,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { store } from './store';
+import { Provider } from 'react-redux';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -17,19 +19,18 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/Sans Serif Medium.ttf'),
-    Poppins: require('@/assets/fonts/Poppins-Regular.otf')
+    'Quicksand': require('../assets/fonts/Quicksand.ttf'),
   });
 
   const header = 
     <HeaderComponent>
-      <ThemedText type='subtitle' style={styles.subtitle}>
+      <ThemedText style={styles.subtitle}>
         Hi David,
       </ThemedText>
-      <ThemedText type='title' style={styles.title1}>
+      <ThemedText style={styles.title1}>
         Let's Pay
       </ThemedText>
-      <ThemedText type='title' style={styles.title2}>
+      <ThemedText style={styles.title2}>
         your Bills
       </ThemedText>
     </HeaderComponent>
@@ -46,38 +47,48 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{
-            headerShown: true,
-            headerTitle: 'Bayar-Bayar',
-            statusBarTranslucent: true,
-            header: () => header
-          }}/>
-          <Stack.Screen name="+not-found" />
-        </Stack>
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{
+              headerShown: true,
+              headerTitle: 'Bayar-Bayar',
+              statusBarTranslucent: true,
+              header: () => header
+            }}/>
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </ThemeProvider>
+      </Provider>
     </GestureHandlerRootView>
   );
 }
 
 const styles = StyleSheet.create({
+  header: {
+    backgroundColor: ''
+  },
   subtitle: {
+    fontFamily: 'Quicksand',
     color: '#fff',
     textAlign: 'left',
+    marginStart: 10,
+    fontSize: 25,
   },
   title1: {
+    fontFamily: 'Quicksand',
     color: '#fff',
     textAlign: 'left',
     lineHeight: 50,
     marginStart: 20,
-    fontSize: 35,
+    fontSize: 40,
   },
   title2: {
+    fontFamily: 'Quicksand',
     color: '#fff',
     textAlign: 'left',
     marginStart: 40,
-    lineHeight: 40,
-    fontSize: 40,
+    lineHeight: 50,
+    fontSize: 45,
   } 
 })

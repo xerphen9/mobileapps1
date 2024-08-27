@@ -9,8 +9,8 @@ import { ThemedView } from '@/components/ThemedView';
 
 export default function TabTwoScreen() {
   return (
-    <ParallaxScrollView>
-      <ThemedView style={styles.titleContainer}>
+    <ThemedView style={styles.container}>
+      {/* <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Explore</ThemedText>
       </ThemedView>
       <ThemedText>This app includes example code to help you get started.</ThemedText>
@@ -81,12 +81,16 @@ export default function TabTwoScreen() {
             </ThemedText>
           ),
         })}
-      </Collapsible>
-    </ParallaxScrollView>
+      </Collapsible> */}
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+  },
   headerImage: {
     color: '#808080',
     bottom: -90,
