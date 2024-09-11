@@ -30,7 +30,7 @@ export default function ModalComponent({ show, setShow, step, title, onBack, chi
                   step !== 0 ?
                     <ThemedText style={styles.iconBack}>
                       <IconComponent 
-                        name='arrow-back' 
+                        name='arrow-back-ios' 
                         onPress={() => onBack?.(step-1)}/>
                     </ThemedText>
                   : 
@@ -51,8 +51,8 @@ export default function ModalComponent({ show, setShow, step, title, onBack, chi
 
 const styles = StyleSheet.create({
   modalContainer: {
-    height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     justifyContent: 'center',
     alignItems: 'center',
   },

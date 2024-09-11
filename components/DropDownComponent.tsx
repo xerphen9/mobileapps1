@@ -7,38 +7,40 @@ import { ThemedText } from './ThemedText';
 import { IconComponent } from './IconComponent';
 
 export type DropDownProps = {
-    data: DropDown[],
-    setCategory: Dispatch<SetStateAction<string>>;
+    data: any[],
+    defaultSelected: string,
+    setSelected: Dispatch<SetStateAction<string>>;
 }
 
 export default function DropDownComponent({
     data,
-    setCategory
+    defaultSelected,
+    setSelected
 }: DropDownProps) {
     return (
         <SelectDropdown
             data={data}
             onSelect={(selectedItem, index) => {
-                setCategory(selectedItem['name'])
+                setSelected(selectedItem['name'])
             }}
             renderButton={(selectedItem, isOpened) => {
                 return (
                     <ThemedView style={styles.dropdownButtonStyle}>
-                        {selectedItem && (
-                            <IconComponent name={selectedItem.icon} style={styles.dropdownButtonIconStyle} />
-                        )}
-                        <ThemedText style={styles.dropdownButtonTxtStyle}>
-                            {(selectedItem && selectedItem.name) || 'Select a category'}
-                        </ThemedText>
+                                {selectedItem && (
+                                    <IconComponent name={selectedItem.icon === null ? '' : selectedItem.icon} style={styles.dropdownButtonIconStyle} />
+                                )}
+                                <ThemedText style={styles.dropdownButtonTxtStyle}>
+                                    {(selectedItem && selectedItem.name) || `${defaultSelected}`}
+                                </ThemedText>
                         <IconComponent name={isOpened ? 'keyboard-arrow-up' : 'keyboard-arrow-down'} style={styles.dropdownButtonArrowStyle} />
                     </ThemedView>
                 );
             }}
             renderItem={(item, index, isSelected) => {
                 return (
-                    <ThemedView style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#D2D9DF' }) }}>
+                    <ThemedView style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#ffb0b0' }) }}>
                         <IconComponent name={item.icon} style={styles.dropdownItemIconStyle} />
-                        <ThemedText style={styles.dropdownItemTxtStyle}>{item.name}</ThemedText>
+                        <ThemedText style={styles.dropdownItemTxtStyle}>{typeof item.name === 'string' ? item?.name.toUpperCase() : item.name}</ThemedText>
                     </ThemedView>
                 );
             }}
@@ -74,7 +76,7 @@ const styles = StyleSheet.create({
         marginRight: 8,
     },
     dropdownMenuStyle: {
-        width: '50%',
+        width: '60%',
         backgroundColor: '#E9ECEF',
         borderRadius: 20,
     },

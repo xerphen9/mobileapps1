@@ -1,71 +1,54 @@
-  import React, { PropsWithChildren} from 'react'
-import { StyleSheet, StyleProp, ViewStyle, Image, Platform } from 'react-native'
+import React from 'react'
+import { StyleSheet, StyleProp, ViewStyle } from 'react-native'
 import { ThemedView } from './ThemedView'
-import { ThemedText } from './ThemedText';
+import { ThemedText } from './ThemedText'
+import { IconComponent } from './IconComponent'
+import { router } from 'expo-router'
 
-export type HeaderProps = PropsWithChildren & {
-    title? : string;
-    subtitle?: string;
-    style?: StyleProp<ViewStyle>;
+export type HeaderProps = {
+  title: string;
+  title2?: string;
+  style?: StyleProp<ViewStyle>;
 }
 
-export const HeaderComponent = ({ 
-    title,
-    subtitle,
-    style,
-    children,
-    ...rest
-}: HeaderProps) => {
+export function HeaderComponent({title, title2, style}: HeaderProps) {
   return (
-    <ThemedView>
-      <ThemedView {...rest} style={styles.container}>
-        <Image source={require('@/assets/images/person.png')}
-          style={styles.image}
-        />
-        <ThemedView style={styles.content}>
-          {children}
-        </ThemedView>
+    <ThemedView style={[styles.header, style]}>
+      <ThemedView style={styles.headerContent}>
+        <ThemedText type='textNormal' style={styles.backBtn}>
+          <IconComponent name='arrow-back-ios' style={styles.icon} onPress={() => router.back()}/>
+        </ThemedText>
+        <ThemedText type='subtitle' style={styles.title}>{title?.toUpperCase()}</ThemedText>
+        <ThemedText type='defaultSemiBold' style={styles.title}>{title2?.toUpperCase()}</ThemedText>
       </ThemedView>
     </ThemedView>
   )
 }
 
-const styles = StyleSheet.create({
-    container: {
-      height: 250,
-      justifyContent: 'center',
-      backgroundColor: '#ff7979',
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 1,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 2,
-      elevation: 5,
-      borderBottomLeftRadius: 30,
-      borderBottomRightRadius: 30,
-    },
-    image: {
-      position: 'absolute',
-      width: '50%',
-      height: '100%',
-      right: 0,
-      marginTop: '15%',
-    },
-    content: {
-      padding: 5,
-      marginTop: 20,
-      backgroundColor: 'transparent',
-    },
-    subtitle: {
-      color: '#fff',
-      textAlign: 'left',
-    },
-    title: {
-      width: '40%',
-      fontSize: 28,
-      color: '#fff',
-      textAlign: 'left',
-    }
+const styles = StyleSheet.create({ 
+  header: {
+    height: 100,
+    justifyContent: 'flex-end',
+    backgroundColor: '#FF8A8A',
+  },
+  headerContent: {
+    height: 'auto',
+    justifyContent: 'center',
+    backgroundColor: '#FF8A8A',
+  },
+  backBtn: {
+    position: 'absolute',
+    marginHorizontal: 15,
+    textAlign: 'center',
+    zIndex: 2,
+    padding: 10,
+  },
+  icon: {
+    fontSize: 30,
+    color: '#fff',
+  },
+  title: {
+    textAlign: 'center',
+    color: '#fff'
+  },
 })

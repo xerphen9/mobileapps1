@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { HeaderComponent } from '@/components/HeaderComponent';
+import { BannerComponent } from '@/components/BannerComponent';
 import { ThemedText } from '@/components/ThemedText';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -23,7 +23,7 @@ export default function RootLayout() {
   });
 
   const header = 
-    <HeaderComponent>
+    <BannerComponent>
       <ThemedText style={styles.subtitle}>
         Hi David,
       </ThemedText>
@@ -33,7 +33,7 @@ export default function RootLayout() {
       <ThemedText style={styles.title2}>
         your Bills
       </ThemedText>
-    </HeaderComponent>
+    </BannerComponent>
 
   useEffect(() => {
     if (loaded) {
@@ -52,8 +52,8 @@ export default function RootLayout() {
           <Stack>
             <Stack.Screen name="(tabs)" options={{
               headerShown: true,
-              headerTitle: 'Bayar-Bayar',
               statusBarTranslucent: true,
+              navigationBarHidden: true,
               header: () => header
             }}/>
             <Stack.Screen name="+not-found" />
@@ -69,14 +69,12 @@ const styles = StyleSheet.create({
     backgroundColor: ''
   },
   subtitle: {
-    fontFamily: 'Quicksand',
     color: '#fff',
     textAlign: 'left',
     marginStart: 10,
     fontSize: 25,
   },
   title1: {
-    fontFamily: 'Quicksand',
     color: '#fff',
     textAlign: 'left',
     lineHeight: 50,
@@ -84,7 +82,6 @@ const styles = StyleSheet.create({
     fontSize: 40,
   },
   title2: {
-    fontFamily: 'Quicksand',
     color: '#fff',
     textAlign: 'left',
     marginStart: 40,

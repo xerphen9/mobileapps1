@@ -89,7 +89,8 @@ export default function TabLayout() {
           tabBarActiveBackgroundColor: Colors[colorScheme ?? 'light'].tabBackground,
           tabBarInactiveBackgroundColor: Colors[colorScheme ?? 'light'].tabBackground,
           tabBarStyle: styles.tabBarContainer,
-        }}>
+        }}
+        backBehavior='history'>
         <Tabs.Screen
           name="index"
           options={{
@@ -149,7 +150,7 @@ export default function TabLayout() {
                   type='default'
                   style={styles.btn}
                   onPress={() => setStep(step+1)}>
-                  <ThemedText type='buttonText' style={styles.btnText}>NEXT</ThemedText>
+                  <ThemedText type='textWhite' style={styles.btnText}>NEXT</ThemedText>
                 </ButtonComponent>
               </ThemedView>
             : 
@@ -171,7 +172,7 @@ export default function TabLayout() {
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item, index }) => (
                     <ThemedView style={styles.memberItem}>
-                      <ThemedText>{item}</ThemedText>
+                      <ThemedText style={styles.memberName}>{item}</ThemedText>
                       <ButtonComponent type='secondary' onPress={() => removeMember(index)} style={styles.btnRemove}>
                         <ThemedText style={styles.btnText}>X</ThemedText>
                       </ButtonComponent>
@@ -184,7 +185,7 @@ export default function TabLayout() {
                 type='default'
                 style={styles.btn}
                 onPress={handleSubmit}>
-                <ThemedText type='buttonText' style={styles.btnText}>OK</ThemedText>
+                <ThemedText type='textWhite' style={styles.btnText}>OK</ThemedText>
               </ButtonComponent>
               </>
           }
@@ -192,7 +193,8 @@ export default function TabLayout() {
             isDateOpen && (
               <DateTimePicker value={date}
                 mode='date'
-                display='default'
+                display='spinner'
+                themeVariant='dark'
                 onPointerCancel={() => setIsDateOpen(false)}
                 onChange={changeDate}
               />
@@ -214,7 +216,7 @@ const styles = StyleSheet.create({
     height: 65,
   },
   tabBarlabelFocused: {
-    color: '#ff7979',
+    color: '#FF8A8A',
     fontSize: 30,
     fontWeight: 'bold',
     position: 'absolute',
@@ -285,6 +287,9 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     fontSize: 15,
     width: '70%',
+    fontWeight: 'bold',
+  },
+  memberName: {
   },
   memberList: {
     marginBottom: 20,

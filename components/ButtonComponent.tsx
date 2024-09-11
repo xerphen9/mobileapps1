@@ -7,7 +7,7 @@ export type ButtonComponentProps = PropsWithChildren & {
   darkColor?: string;
   style?: StyleProp<ViewStyle>;
   onPress?: (event: GestureResponderEvent) => void;
-  type?: 'default' | 'primary' | 'secondary' | 'basic' | 'transparent' | 'close' | 'multiplechoice' | 'multiplechoiceSelected';
+  type?: 'default' | 'primary' | 'secondary' | 'basic' | 'transparent' | 'close' | 'notselected' | 'selected' | 'back';
 };
 
 export function ButtonComponent({
@@ -25,8 +25,9 @@ export function ButtonComponent({
         type === 'close' ? styles.close : undefined,
         type === 'basic' ? styles.basic : undefined, 
         type === 'transparent' ? styles.transparent : undefined,
-        type === 'multiplechoice' ? styles.multiplechoice : undefined,
-        type === 'multiplechoiceSelected' ? styles.multiplechoiceSelected : undefined,
+        type === 'notselected' ? styles.notselected : undefined,
+        type === 'selected' ? styles.selected : undefined,
+        type === 'back' ? styles.back : undefined,
         style
       ]}>
       {children}
@@ -40,13 +41,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
     padding: 10,
-    shadowColor: '#ff7979',
+    shadowColor: '#FF8A8A',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 5,
     elevation: 8,
     position: 'absolute',
-    backgroundColor: '#ff7979',
+    backgroundColor: '#FF8A8A',
   },
   primary: {
     justifyContent: 'center',
@@ -93,24 +94,32 @@ const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: '#8b8b8b',
   },
-  multiplechoice: {
+  notselected: {
     width: 100,
     alignItems: 'center',
     borderRadius: 10,
     padding: 10,
     position: 'relative',
-    borderColor: '#ff7979',
+    borderColor: '#FF8A8A',
     borderWidth: 1,
     backgroundColor: 'transparent',
   },
-  multiplechoiceSelected: {
+  selected: {
     width: 100,
     alignItems: 'center',
     borderRadius: 10,
     padding: 10,
     position: 'relative',
-    borderColor: '#fff',
+    borderColor: '#ffffff',
     borderWidth: 1,
-    backgroundColor: '#ff7979',
+    backgroundColor: '#FF8A8A',
+  },
+  back: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 50,
+    padding: 15,
+    position: 'absolute',
+    backgroundColor: '#ebebeb',
   }
 });

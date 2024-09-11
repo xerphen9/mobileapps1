@@ -8,10 +8,11 @@ const tintColorDark = '#fff'; //white
 
 export const Colors = {
   light: {
-    text: '#000', //black
+    text: '#282828', //black
     background: '#FFFFFF', //white
+    themeColor: '#FF8A8A', //peach
     tabBackground: '#efeded', //broken white
-    backgroundCard: '#ff7979', //peach
+    backgroundCard: '#E8E8E8', //light gray
     shadowColor: '#000',
     tint: tintColorLight,
     icon: '#e79aff', //lilac
@@ -19,10 +20,11 @@ export const Colors = {
     tabIconSelected: '#000', //black
   },
   dark: {
-    text: '#ECEDEE', //light gray
+    text: '#FFFFFF', //white
     background: '#1F1A24', //dark
+    themeColor: '#FF8A8A', //peach
     tabBackground: '#282828', //dark gray
-    backgroundCard: '#ff7979', //peach
+    backgroundCard: '#9BA1A6', //gray a little bit light
     shadowColor: '#fff',
     tint: tintColorDark,
     icon: '#9BA1A6', //gray a little bit light

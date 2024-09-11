@@ -7,10 +7,9 @@ export interface EventList {
 
 export type StandList = {
     id: number;
-    created_at: string;
     underwriter: string;
     name: string;
-    category: 'food' | 'gas' | 'hotel' | 'ticket';
+    category: '' | 'food' | 'gas' | 'hotel' | 'ticket';
     members?: string[];
     amount: number;
 }

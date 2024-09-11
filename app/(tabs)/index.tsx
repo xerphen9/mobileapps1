@@ -1,17 +1,19 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { StyleSheet, FlatList, Pressable } from 'react-native';
+import { StyleSheet, FlatList, Pressable, useColorScheme } from 'react-native';
 import { supabase } from '@/libs/supabase';
 import Toast from 'react-native-toast-message';
 import { router } from 'expo-router';
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
+import { Colors } from '@/constants/Colors';
 
-import { CardComponent } from '@/components/CardComponent';
+import { EventListComponent } from '@/components/EventListComponent';
 import { EventList } from '@/app/types';
 import { ThemedText } from '@/components/ThemedText';
 import { details } from '@/features/eventSlice';
 import { ThemedView } from '@/components/ThemedView';
 
 export default function HomeScreen() {
+  const theme = useColorScheme() ?? 'light'
   const isRefresh: boolean = useAppSelector((state) => state.event.refresh)
   const [list, setList] = useState<EventList[]>([])
   const [remove, setRemove] = useState<boolean>(false)
@@ -78,12 +80,16 @@ export default function HomeScreen() {
       <FlatList
         data={list}
         renderItem={({ item }) =>
-          <CardComponent id={item.id} onRemove={() => handleRemove(item.id)}>
+          <EventListComponent id={item.id} onRemove={() => handleRemove(item.id)}>
             <Pressable style={styles.content} onPress={() => handleNavigation(item)}>
-              <ThemedText type='textNormal' style={styles.cardName}>{item.name?.length > 7 ? item.name?.replace(item.name.substring(6), '...').toUpperCase() : item.name.toUpperCase()}</ThemedText>
-              <ThemedText type='link' style={styles.cardDate}>{item.date?.slice(8,10)}/{item.date?.slice(5,7)}/{item.date?.slice(0, 4)}</ThemedText>
+              <ThemedText type='textNormal' style={[styles.cardName, {color: theme === 'light' ? Colors.light.themeColor : Colors.dark.themeColor}]}>
+                {item.name?.length > 7 ? item.name?.replace(item.name.substring(6), '...').toUpperCase() : item.name?.toUpperCase()}
+              </ThemedText>
+              <ThemedText type='default' style={styles.cardDate}>
+                {item.date?.slice(8,10)}/{item.date?.slice(5,7)}/{item.date?.slice(0, 4)}
+              </ThemedText>
             </Pressable>
-          </CardComponent>
+          </EventListComponent>
         }
         onRefresh={() => allEvent()}
         refreshing={false}
@@ -105,17 +111,13 @@ const styles = StyleSheet.create({
   },
   cardName: {
     fontSize: 25,
-    fontFamily: 'Quicksand',
     fontWeight: 'bold',
-    opacity: 0.6,
     textAlignVertical: 'center',
     marginLeft: 10,
-    color: '#ff7979',
     flex: 6,
   },
   cardDate: {
     textAlignVertical: 'bottom',
     marginRight: 10,
-    opacity: 0.5,
   }
 });

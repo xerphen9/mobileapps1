@@ -43,23 +43,27 @@ const styles = StyleSheet.create({
         gap: 2,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#FF8A8A'
     },
     dot1: {
         width: 25,
         height: 25,
-        backgroundColor: '#d991c2',
+        // backgroundColor: '#d991c2',
+        backgroundColor: '#4e4e4e',
         borderRadius: 50,
     },
     dot2: {
         width: 25,
         height: 25,
-        backgroundColor: '#d37bfc',
+        // backgroundColor: '#d37bfc',
+        backgroundColor: '#a0a0a0',
         borderRadius: 50,
     },
     dot3: {
         width: 25,
         height: 25,
-        backgroundColor: '#7b7dfc',
+        // backgroundColor: '#7b7dfc',
+        backgroundColor: '#fff',
         borderRadius: 50,
     }
 })

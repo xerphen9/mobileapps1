@@ -15,7 +15,7 @@ export function Collapsible({ children, title, style }: PropsWithChildren & { ti
       <Pressable
         style={styles.heading}
         onPress={() => setIsOpen((value) => !value)}>
-        <ThemedText type="buttonText">{title}</ThemedText>
+        <ThemedText type="textWhite" style={styles.title}>{title}</ThemedText>
         <Ionicons
           name={isOpen ? 'chevron-down' : 'chevron-forward-outline'}
           size={18}
@@ -34,9 +34,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 5,
-    backgroundColor: '#ff7979',
+    backgroundColor: '#FF8A8A',
     gap: 6,
     marginVertical: 5,
+  },
+  title: {
+    fontSize: 20,
   },
   content: {
     marginTop: 6,
